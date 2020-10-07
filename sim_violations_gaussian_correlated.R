@@ -2,7 +2,6 @@ source("screening-rules.R")
 source("utils.R")
 
 library(SLOPE)
-library(rdatasets)
 library(progress)
 
 n <- 100

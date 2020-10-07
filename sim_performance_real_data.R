@@ -1,26 +1,17 @@
+source("datasets.R")
+
 library(SLOPE)
-library(rdatasets)
-library(e1071)
-library(Matrix)
-library(SparseM)
 
-temp_file <- tempfile(fileext = ".txt")
-
-# e2006 test set
-download.file(
-  "https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/QJEUKR/PGPWAK",
-  temp_file
-)
-
-tmp <- e1071::read.matrix.csr(temp_file, fac = TRUE)
-
-e2006 <- list(x = as(tmp$x, "dgCMatrix"), y = tmp$y)
+e2006 <- get_dataset("e2006")
+dorothea <- get_dataset("dorothea")
+physician <- get_dataset("physician")
+poker <- get_dataset("poker")
 
 data <- list(
   e2006 = e2006,
-  dorothea = rdatasets::dorothea,
-  physician = rdatasets::physician,
-  zipcode = rdatasets::zipcode
+  dorothea = dorothea,
+  physician = physician,
+  poker = poker
 )
 
 out <- data.frame()
@@ -37,7 +28,7 @@ for (i in 1:length(data)) {
                    e2006 = "gaussian",
                    dorothea = "binomial",
                    physician = "poisson",
-                   zipcode = "multinomial")
+                   poker = "multinomial")
 
   n <- nrow(x)
   p <- ncol(x)
@@ -57,7 +48,8 @@ for (i in 1:length(data)) {
                    family = family,
                    lambda = "bh",
                    q = 0.1*min(1, n/p),
-                   screen = screening)
+                   screen = screening,
+                   verbosity = 1)
     })
 
     tmp <- data.frame(dataset = dataset,
@@ -72,6 +64,4 @@ for (i in 1:length(data)) {
 
 rownames(out) <- NULL
 
-sim_performance_real_data <- out
-overwrite <- file.exists("data/sim_performance_real_data.rda")
-usethis::use_data(sim_performance_real_data, overwrite = overwrite)
+saveRDS(out, "results/sim_performance_real_data.rds")

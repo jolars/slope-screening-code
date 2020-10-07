@@ -56,6 +56,4 @@ for (j in seq_along(rho)) {
   }
 }
 
-sim_efficiency_lambda_methods <- out
-overwrite <- file.exists("data/sim_efficiency_lambda_methods.rda")
-usethis::use_data(sim_efficiency_lambda_methods, overwrite = overwrite)
+saveRDS(out, "results/sim_efficiency_lambda_methods.rds")

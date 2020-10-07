@@ -54,7 +54,5 @@ for (i in seq_along(rho)) {
 
 rownames(out) <- NULL
 
-sim_performance_alg <- out
-overwrite <- file.exists("data/sim_performance_alg.rda")
-usethis::use_data(sim_performance_alg, overwrite = overwrite)
+saveRDS(out, "results/sim_performance_alg.rds")
 

@@ -53,10 +53,10 @@
     },
     "SLOPE": {
       "Package": "SLOPE",
-      "Version": "0.3.2",
+      "Version": "0.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d2c2aa5222aa4120f040f8b0a464bd32"
+      "Hash": "41be9b04c23951895cc6c30e67fd6c09"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -212,6 +212,13 @@
       "Repository": "CRAN",
       "Hash": "531a82d1beed1f545beb25f4f5945bf7"
     },
+    "glmnet": {
+      "Package": "glmnet",
+      "Version": "4.0-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "056100917c75e6f8a0d36f8bdd552799"
+    },
     "glue": {
       "Package": "glue",
       "Version": "1.4.1",
@@ -359,18 +366,6 @@
       "Repository": "CRAN",
       "Hash": "97def703420c8ab10d8f0e6c72101e02"
     },
-    "rdatasets": {
-      "Package": "rdatasets",
-      "Version": "0.0.0.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "rdatasets",
-      "RemoteUsername": "jolars",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "8f0d98e1f3b9a822badb8f13ae173993965707b5",
-      "Hash": "5f223787fe6cbef62c5e069433a4d675"
-    },
     "rematch2": {
       "Package": "rematch2",
       "Version": "2.1.2",
@@ -405,6 +400,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "33a5b27a03da82ac4b1d43268f80088a"
+    },
+    "shape": {
+      "Package": "shape",
+      "Version": "1.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ef692f72a633981cad0d4950a5775702"
+    },
+    "survival": {
+      "Package": "survival",
+      "Version": "3.1-12",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1c5bb53bd428f3c42a25b7aeb983d8c7"
     },
     "sys": {
       "Package": "sys",

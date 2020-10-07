@@ -81,6 +81,4 @@ for (rho in c(0, 0.2, 0.4)) {
   out <- rbind(out, tmp)
 }
 
-sim_efficiency_gaussian_correlated <- out
-overwrite <- file.exists("data/sim_efficiency_gaussian_correlated.rda")
-usethis::use_data(sim_efficiency_gaussian_correlated, overwrite = overwrite)
+saveRDS(out, "results/sim_efficiency_gaussian_correlated.rds")

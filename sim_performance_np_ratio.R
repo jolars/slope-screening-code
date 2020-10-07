@@ -58,6 +58,4 @@ for (j in seq_along(ratio)) {
   }
 }
 
-sim_performance_np_ratio <- out
-overwrite <- file.exists("data/sim_performance_np_ratio.rda")
-usethis::use_data(sim_performance_np_ratio, overwrite = overwrite)
+saveRDS(out, "results/sim_performance_np_ratio.rds")
