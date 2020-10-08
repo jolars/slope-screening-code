@@ -27,6 +27,7 @@ d %>%
   group_by(dataset, model, rule, n, p) %>%
   summarise(time = round(mean(time))) %>%
   pivot_wider(values_from = time, names_from = rule) %>%
+  unite("dataset (model)", dataset, model) %>%
   rename("$n$" = n,
          "$p$" = p,
          "no screening" = none,
@@ -35,4 +36,4 @@ d %>%
         escape = FALSE,
         booktabs = TRUE,
         caption = cap) %>%
-  add_header_above(c("", "", "", "", "time (s)" = 2))
+  add_header_above(c("", "", "", "time (s)" = 2))
