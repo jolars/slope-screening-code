@@ -101,6 +101,7 @@ for (i in 1:length(data)) {
                         p = ncol(x),
                         path_length = path_length,
                         penalty = seq_along(fit$sigma),
+                        sigma = fit$sigma,
                         n_violations = n_violations,
                         n_active = n_active,
                         n_true_active = n_true_active,
