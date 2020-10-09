@@ -26,12 +26,12 @@ contains the figures used in the paper.
 To reproduce the simulations, first run [`prepare_simulations.R`](prepare_simulations.R) 
 to source all the necessary bits of code. Then run one of the `sim_*.R` files to reproduce
 a given simulation. The results from the simulations will be output to the
-[results folder](/folder) in this repository. This folder is already populated with the 
+[results folder](/results) in this repository. This folder is already populated with the 
 results from the paper.
 
 ## Data
 
-[/data-raw](/data-raw) contains the code required to obtain the data files used
+The [data-raw folder](/data-raw) contains the code required to obtain the data files used
 in the experiments. These data-sets are, for the most part, however, already
 present in the </data> folder of this repository.
 
