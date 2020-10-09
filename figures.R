@@ -1,18 +1,21 @@
 library(dplyr)
+library(tidyr)
 library(forcats)
 library(lattice)
 library(tactile)
 library(latticeExtra)
+library(RColorBrewer)
 
 thm <- tactile.theme(c(7, 4), superpose.line = list(lty = 1:3))
 
 fw <- 5.5 # full width
 
-load("data/sim_efficiency_gaussian_correlated.rda")
-load("data/sim_efficiency_violations_real_data.rda")
-load("data/sim_performance_alg.rda")
-load("data/sim_performance_simulated_data.rda")
-load("data/sim_violations_gaussian_correlated.rda")
+load("results/sim_efficiency_gaussian_correlated.rda")
+sim_efficiency_violations_real_data <-
+  readRDS("results/sim_efficiency_violations_real_data.rds")
+load("results/sim_performance_alg.rda")
+load("results/sim_performance_simulated_data.rda")
+load("results/sim_violations_gaussian_correlated.rda")
 
 # gaussian-correlated -----------------------------------------------------
 
@@ -35,7 +38,7 @@ xyplot(screened + active ~ sigma | rho,
                             var.name = expression(rho)),
        auto.key = list(points = FALSE, lines = TRUE, x = 0, y = 0.85))
 dev.off()
-
+knitr::plot_crop("figures/gaussian-correlated.pdf")
 
 # gaussian-correlated-violations ------------------------------------------
 
@@ -48,7 +51,7 @@ d_violations_gaussian_correlated <-
   summarise(mean_viol = mean(n_violations > 0)) %>%
   filter(method != "safe")
 
-pdf("figures/gaussian-correlated-violations.pdf", width = 5, height = 1.3)
+pdf("figures/gaussian-correlated-violations.pdf", width = fw, height = 1.6)
 trellis.par.set(thm)
 xyplot(mean_viol ~ sigma_ratio | p,
        layout = c(5, 1),
@@ -64,10 +67,11 @@ xyplot(mean_viol ~ sigma_ratio | p,
        ylab = "fraction of fits\n with violations",
        data = d_violations_gaussian_correlated)
 dev.off()
+knitr::plot_crop("figures/gaussian-correlated-violations.pdf")
 
 # performance-simulated-data ----------------------------------------------
 
-pdf("figures/performance-simulated-data.pdf", width = 2.8, height = 2.7)
+pdf("figures/performance-simulated-data.pdf", width = fw, height = 2.7)
 trellis.par.set(thm)
 d_perf_sim <- as_tibble(sim_performance_simulated_data) %>%
   mutate(screening = factor(screening,
@@ -92,7 +96,7 @@ bwplot2(correlation ~ time | family,
         xscale.components = xscale.components.log10ticks,
         auto.key = list(space = "top", columns = 2))
 dev.off()
-
+knitr::plot_crop("figures/performance-simulated-data.pdf")
 
 # performance-alg ---------------------------------------------------------
 
@@ -128,10 +132,11 @@ pl <- xyplot(xbar ~ rho,
              })
 pl
 dev.off()
+knitr::plot_crop("figures/performance-alg.pdf")
 
 # real-data-efficiency ----------------------------------------------------
 
-pdf("figures/efficiency-real-data.pdf", width = 5, height = 1.5)
+pdf("figures/efficiency-real-data.pdf", width = fw, height = 2.5)
 trellis.par.set(thm)
 d_efficiency_violations_real <- sim_efficiency_violations_real_data
 colnames(d_efficiency_violations_real) <-
@@ -139,27 +144,48 @@ colnames(d_efficiency_violations_real) <-
     "response",
     "n",
     "p",
+    "path_length",
     "penalty",
     "violations",
     "screened",
     "active",
     "unique",
     "KKT")
+
 d_efficiency_violations_real_frac <-
-  as_tibble(d_efficiency_violations_real) %>%
+  d_efficiency_violations_real %>%
+  select(-violations, -unique, -KKT) %>%
   mutate(fraction = active/p,
          screened = screened/p,
          active = active/p,
          response = fct_recode(response,
                                OLS = "gaussian",
-                               logistic = "binomial"))
+                               logistic = "binomial")) %>%
+  group_by(path_length, dataset, response) %>%
+  mutate(penalty_frac = (penalty - 1)/max(penalty - 1)) %>%
+  ungroup() %>%
+  pivot_longer(c(screened, active)) %>%
+  unite("type", c(path_length, name)) %>%
+  filter(!(type %in% c("20_active", "50_active"))) %>%
+  mutate(type = as_factor(type),
+         type = fct_recode(type,
+                           "screened (20)" = "20_screened",
+                           "screened (50)" = "50_screened",
+                           "screened (100)" = "100_screened",
+                           "active" = "100_active"))
 
-p <- xyplot(screened + active ~ penalty | dataset + response,
+cols <- brewer.pal(3, "Set2")
+
+p <- xyplot(value ~ penalty_frac | dataset + response,
+            groups = type,
             ylab = "fraction of predictors",
-            xlab = "penalty index",
-            par.settings = list(superpose.line = list(col = 1, lty = c(1, 2))),
-            auto.key = list(lines = TRUE, points = FALSE, x = 0.03, y = 0.84),
+            xlab = "fraction of path length",
+            par.settings = list(superpose.line = list(col = c(cols, "black"),
+                                                      lty = c(1, 1, 1, 2))),
+            auto.key = list(lines = TRUE, points = FALSE, space = "top",
+                            columns = 4),
             data = d_efficiency_violations_real_frac,
             type = "l")
 useOuterStrips(p)
 dev.off()
+knitr::plot_crop("figures/efficiency-real-data.pdf")
