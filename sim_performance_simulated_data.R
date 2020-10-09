@@ -89,6 +89,4 @@ for (i in 1:n_rep) {
 
 rownames(out) <- NULL
 
-sim_performance_simulated_data <- out
-overwrite <- file.exists("data/sim_performance_simulated_data.rda")
-usethis::use_data(sim_performance_simulated_data, overwrite = overwrite)
+saveRDS(out, "results/sim_performance_simulated_data.rds")
