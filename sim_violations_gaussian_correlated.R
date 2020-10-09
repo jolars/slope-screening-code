@@ -65,7 +65,7 @@ for (i in 1:n_p) {
 
     x_colnorms <- apply(x, 2, norm, "2")
 
-    for (method in c("safe", "strong")) {
+    for (method in c("none", "strong")) {
       for (m in 2:length(sigma)) {
         beta_prev <- beta_hat[, m-1]
         intercept_prev <- 0
@@ -103,6 +103,4 @@ for (i in 1:n_p) {
   }
 }
 
-sim_violations_gaussian_correlated <- out
-overwrite <- file.exists("data/sim_violations_gaussian_correlated.rda")
-usethis::use_data(sim_violations_gaussian_correlated, overwrite = overwrite)
+saveRDS(out, "results/sim_violations_gaussian_correlated.rds")
