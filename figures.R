@@ -9,13 +9,16 @@ library(RColorBrewer)
 thm <- tactile.theme(c(7, 4), superpose.line = list(lty = 1:3))
 
 fw <- 5.5 # full width
-
-load("results/sim_efficiency_gaussian_correlated.rda")
+sim_efficiency_gaussian_correlated <-
+  readRDS("results/sim_efficiency_gaussian_correlated.rds")
 sim_efficiency_violations_real_data <-
   readRDS("results/sim_efficiency_violations_real_data.rds")
-load("results/sim_performance_alg.rda")
-load("results/sim_performance_simulated_data.rda")
-load("results/sim_violations_gaussian_correlated.rda")
+sim_performance_alg <-
+  readRDS("results/sim_performance_alg.rds")
+sim_performance_simulated_data <-
+  readRDS("results/sim_performance_simulated_data.rds")
+sim_violations_gaussian_correlated <-
+  readRDS("results/sim_violations_gaussian_correlated.rds")
 
 # gaussian-correlated -----------------------------------------------------
 
@@ -28,6 +31,7 @@ pdf("figures/gaussian-correlated.pdf", width = fw, height = 1.5)
 trellis.par.set(thm)
 xyplot(screened + active ~ sigma | rho,
        data = sim_gaussian_correlated,
+       layout = c(3, 1),
        grid = TRUE,
        xlab = expression(sigma/max((sigma))),
        ylab = "number of predictors",
@@ -77,10 +81,12 @@ d_perf_sim <- as_tibble(sim_performance_simulated_data) %>%
   mutate(screening = factor(screening,
                             c(T, F),
                             c("screening", "no screening")),
+
          family = fct_recode(family,
                              OLS = "gaussian",
                              logistic = "binomial",
                              multinom = "multinomial"),
+         family = fct_relevel(family, "OLS", "logistic", "poisson", "multinom"),
          correlation = as.factor(correlation))
 
 bwplot2(correlation ~ time | family,
@@ -174,7 +180,7 @@ d_efficiency_violations_real_frac <-
                            "screened (100)" = "100_screened",
                            "active" = "100_active"))
 
-cols <- brewer.pal(3, "Set2")
+cols <- brewer.pal(3, "Dark2")
 
 p <- xyplot(value ~ penalty_frac | dataset + response,
             groups = type,

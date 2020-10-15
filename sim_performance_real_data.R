@@ -5,13 +5,18 @@ library(SLOPE)
 e2006 <- get_dataset("e2006")
 dorothea <- get_dataset("dorothea")
 physician <- get_dataset("physician")
-poker <- get_dataset("poker")
+news20 <- get_dataset("news20")
+
+# reduce news20 dataset
+set.seed(811)
+ind <- sample(nrow(news20$x), 1000)
+news20 <- list(x = news20$x[ind, ], y = news20$y[ind])
 
 data <- list(
   e2006 = e2006,
   dorothea = dorothea,
   physician = physician,
-  poker = poker
+  news20 = news20
 )
 
 out <- data.frame()
@@ -28,7 +33,7 @@ for (i in 1:length(data)) {
                    e2006 = "gaussian",
                    dorothea = "binomial",
                    physician = "poisson",
-                   poker = "multinomial")
+                   news20 = "multinomial")
 
   n <- nrow(x)
   p <- ncol(x)

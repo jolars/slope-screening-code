@@ -6,12 +6,7 @@ library(forcats)
 library(knitr)
 library(kableExtra)
 
-g <- readRDS("results/sim_performance_real_data_gaussian.rds")
-b <- readRDS("results/sim_performance_real_data_binomial.rds")
-p <- readRDS("results/sim_performance_real_data_poisson.rds")
-m <- readRDS("results/sim_performance_real_data_multinomial.rds")
-
-d <- rbind(g, b, p, m)
+d <- readRDS("results/sim_performance_real_data.rds")
 
 cap <- paste0(
   "Benchmarks measuring wall-clock time for four data sets fit with ",
