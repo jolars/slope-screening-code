@@ -17,7 +17,7 @@ d %>%
   mutate(rule = ifelse(screening, "strong", "none")) %>%
   mutate(dataset = as.character(dataset)) %>%
   rename(model = family) %>%
-  mutate(model = fct_recode(model, OLS = "gaussian", logistic = "binomial")) %>%
+  mutate(model = fct_recode(model, "least-squares" = "gaussian", logistic = "binomial")) %>%
   group_by(dataset, model, rule, n, p) %>%
   summarise(time = round(mean(time))) %>%
   pivot_wider(values_from = time, names_from = rule) %>%

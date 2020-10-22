@@ -83,10 +83,10 @@ d_perf_sim <- as_tibble(sim_performance_simulated_data) %>%
                             c("screening", "no screening")),
 
          family = fct_recode(family,
-                             OLS = "gaussian",
+                             "least-sq" = "gaussian",
                              logistic = "binomial",
                              multinom = "multinomial"),
-         family = fct_relevel(family, "OLS", "logistic", "poisson", "multinom"),
+         family = fct_relevel(family, "least-sq", "logistic", "poisson", "multinom"),
          correlation = as.factor(correlation))
 
 bwplot2(correlation ~ time | family,
@@ -165,7 +165,7 @@ d_efficiency_violations_real_frac <-
          screened = screened/p,
          active = active/p,
          response = fct_recode(response,
-                               OLS = "gaussian",
+                               "least-squares" = "gaussian",
                                logistic = "binomial")) %>%
   group_by(path_length, dataset, response) %>%
   mutate(penalty_frac = (penalty - 1)/max(penalty - 1)) %>%
